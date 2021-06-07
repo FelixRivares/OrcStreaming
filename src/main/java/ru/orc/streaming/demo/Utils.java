@@ -3,6 +3,7 @@ package ru.orc.streaming.demo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.experimental.UtilityClass;
@@ -21,9 +22,20 @@ public class Utils {
                  .toString();
   }
 
+  public String getRandomStringFromList(List<String> stringList) {
+    return stringList.get(ThreadLocalRandom.current().nextInt(stringList.size()) % stringList.size());
+  }
+
   public LocalDateTime generateRandomLocalDateTime() {
     int hundredYears = 100 * 365;
     LocalDate localDate = LocalDate.ofEpochDay(ThreadLocalRandom.current().nextInt(-hundredYears, hundredYears));
+    LocalTime localTime = between(LocalTime.MIN, LocalTime.MAX);
+    return LocalDateTime.of(localDate, localTime);
+  }
+
+  public LocalDateTime generateRandomLocalDateTimeBetween(LocalDate startDate, LocalDate endDate) {
+    long randomDay = ThreadLocalRandom.current().nextLong(startDate.toEpochDay(), endDate.toEpochDay());
+    LocalDate localDate = LocalDate.ofEpochDay(randomDay);
     LocalTime localTime = between(LocalTime.MIN, LocalTime.MAX);
     return LocalDateTime.of(localDate, localTime);
   }
