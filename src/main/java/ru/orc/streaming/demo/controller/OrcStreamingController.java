@@ -8,20 +8,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.orc.streaming.demo.generator.OrcDemoGenerator;
+import ru.orc.streaming.demo.merge.OrcFileMerger;
 import ru.orc.streaming.demo.reader.OrcStreamingReaderService;
 
 @RestController
 public class OrcStreamingController {
 
   private final OrcStreamingReaderService readerService;
+  private final OrcFileMerger orcFileMerger;
   private final OrcDemoGenerator orcDemoGenerator;
 
   @Autowired
   public OrcStreamingController(
       OrcStreamingReaderService readerService,
+      OrcFileMerger orcFileMerger,
       OrcDemoGenerator orcDemoGenerator) {
 
     this.readerService = readerService;
+    this.orcFileMerger = orcFileMerger;
     this.orcDemoGenerator = orcDemoGenerator;
   }
 
@@ -47,6 +51,15 @@ public class OrcStreamingController {
     } else {
       orcDemoGenerator.generateWithAllSupportedTypes(path, rowCount);
     }
+  }
+
+  @SneakyThrows
+  @PostMapping("/merge")
+  public void mergeFiles(
+      @RequestParam("toFilePath") String toFilePath,
+      @RequestParam("sourcePath") String sourcePath) {
+
+    orcFileMerger.merge(toFilePath, sourcePath);
   }
 
 }

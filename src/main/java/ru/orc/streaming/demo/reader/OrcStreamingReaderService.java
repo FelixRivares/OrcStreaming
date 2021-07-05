@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.fs.FileSystem;
@@ -12,6 +13,8 @@ import org.apache.hadoop.hive.ql.exec.vector.VectorizedRowBatch;
 import org.apache.orc.OrcFile;
 import org.apache.orc.Reader;
 import org.apache.orc.RecordReader;
+import org.apache.orc.TypeDescription;
+import org.apache.orc.TypeDescription.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.orc.streaming.demo.hdfs.HdfsService;
@@ -42,6 +45,22 @@ public class OrcStreamingReaderService {
     for (Path orcFilesPath : resultOrcFilesPaths) {
       Reader reader = OrcFile.createReader(orcFilesPath, OrcFile.readerOptions(fileSystem.getConf()));
       try (RecordReader rows = reader.rows()) {
+        log.info("Schema [{}]", reader.getSchema().toJson());
+        log.info("Schema [{}]", reader.getSchema().toString());
+
+        List<TypeDescription> children = reader.getSchema().getChildren();
+
+        List<String> fieldNames = reader.getSchema().getFieldNames();
+
+        List<Category> collect = fieldNames.stream()
+                                           .map(fieldName -> reader.getSchema().findSubtype(fieldName))
+                                           .map(TypeDescription::getCategory)
+                                           .collect(Collectors.toList());
+
+        for (Category child : collect) {
+          log.info(child.getName());
+        }
+
         VectorizedRowBatch batch = reader.getSchema().createRowBatch();
         while (rows.nextBatch(batch)) {
           for (int rowIndex = 0; rowIndex < batch.size; rowIndex++) {

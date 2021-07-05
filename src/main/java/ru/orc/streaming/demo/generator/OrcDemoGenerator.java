@@ -23,7 +23,7 @@ import ru.orc.streaming.demo.Utils;
 public class OrcDemoGenerator {
 
   private static final TypeDescription ORC_SCHEMA = TypeDescription.fromString(
-      "struct<longValue:int,doubleValue:double,stringValue:binary,timestampValue:timestamp>");
+      "struct<`long.Value`:int,`double.Value`:double,`stringValue`:binary,`timestampValue`:timestamp>");
 
   private final FileSystem fileSystem;
 
