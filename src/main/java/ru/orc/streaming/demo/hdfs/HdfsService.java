@@ -32,4 +32,14 @@ public class HdfsService {
     return filePaths;
   }
 
+  @SneakyThrows
+  public void deleteDirectory(String path, boolean recursive) {
+    fileSystem.delete(new Path(path), recursive);
+  }
+
+  @SneakyThrows
+  public long getModificationTime(String path) {
+    return fileSystem.getFileStatus(new Path(path)).getModificationTime();
+  }
+
 }

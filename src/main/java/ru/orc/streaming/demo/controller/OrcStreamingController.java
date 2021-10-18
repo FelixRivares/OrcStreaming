@@ -3,6 +3,7 @@ package ru.orc.streaming.demo.controller;
 import javax.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import ru.orc.streaming.demo.generator.OrcDemoGenerator;
 import ru.orc.streaming.demo.merge.OrcFileMerger;
 import ru.orc.streaming.demo.reader.OrcStreamingReaderService;
 
+@Validated
 @RestController
 public class OrcStreamingController {
 

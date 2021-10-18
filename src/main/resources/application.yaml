@@ -1,2 +1,9 @@
 fs:
   type: "local"
+core:
+  site:
+    path: "/Users/sbt-chernov-sv/Repos/own/OrcStreaming/configuration/ST/core-site.xml"
+
+hdfs:
+  site:
+    path: "/Users/sbt-chernov-sv/Repos/own/OrcStreaming/configuration/ST/hdfs-site.xml"
